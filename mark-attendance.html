@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mark Attendance - CR Attendance</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="logo">📋</span>
+        <span class="sidebar-title">CR Attendance</span>
+        <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
+        <a href="mark-attendance.html" class="nav-item active">✅ Mark Attendance</a>
+        <a href="reports.html" class="nav-item">📊 Reports</a>
+        <a href="students.html" class="nav-item">👥 Students</a>
+        <a href="subjects.html" class="nav-item">📚 Subjects</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="cr-info">
+          <div class="cr-avatar" id="crAvatar">CR</div>
+          <div>
+            <div class="cr-name" id="crName">Loading...</div>
+            <div class="cr-class" id="crClass">--</div>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <header class="top-bar">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <h2>Mark Attendance</h2>
+        <div class="top-bar-right">
+          <span id="todayDate" class="date-badge"></span>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <!-- Session Setup -->
+        <div class="section-card" id="sessionSetup">
+          <h3 class="section-title">📝 Setup Session</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Subject</label>
+              <select id="subjectSelect">
+                <option value="">Select Subject</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Lecture No.</label>
+              <input type="number" id="lectureNo" placeholder="e.g. 12" min="1" />
+            </div>
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" id="attendanceDate" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Notes (Optional)</label>
+            <input type="text" id="sessionNotes" placeholder="e.g. Guest lecture, Lab session..." />
+          </div>
+          <button class="btn-primary" onclick="startSession()">
+            ▶ Start Attendance Session
+          </button>
+          <div id="sessionError" class="error-msg hidden"></div>
+        </div>
+
+        <!-- Attendance Marking -->
+        <div class="section-card hidden" id="attendanceSection">
+          <div class="session-info-bar">
+            <div class="session-badge" id="sessionSubject"></div>
+            <div class="session-badge" id="sessionDate"></div>
+            <div class="attendance-counter">
+              <span class="counter-present">✅ <span id="presentCount">0</span></span>
+              <span class="counter-absent">❌ <span id="absentCount">0</span></span>
+              <span class="counter-late">⏰ <span id="lateCount">0</span></span>
+            </div>
+          </div>
+
+          <!-- Bulk Actions -->
+          <div class="bulk-actions">
+            <button class="btn-sm green" onclick="markAll('present')">✅ All Present</button>
+            <button class="btn-sm red" onclick="markAll('absent')">❌ All Absent</button>
+            <input type="text" id="searchStudent" placeholder="🔍 Search student..." 
+                   oninput="filterStudents()" class="search-input" />
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="progress-bar-wrapper">
+            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+          </div>
+          <div class="progress-label">
+            <span id="markedCount">0</span> of <span id="totalCount">0</span> marked
+          </div>
+
+          <!-- Students List -->
+          <div id="studentsList" class="students-attendance-list"></div>
+
+          <!-- Submit -->
+          <div class="submit-section">
+            <button class="btn-secondary" onclick="cancelSession()">✕ Cancel</button>
+            <button class="btn-primary" onclick="submitAttendance()" id="submitBtn">
+              💾 Save Attendance
+            </button>
+          </div>
+          <div id="submitError" class="error-msg hidden"></div>
+          <div id="submitSuccess" class="success-msg hidden"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/attendance.js"></script>
+  </body>
+</html>
