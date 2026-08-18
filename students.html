@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Students - CR Attendance</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="logo">📋</span>
+        <span class="sidebar-title">CR Attendance</span>
+        <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
+        <a href="mark-attendance.html" class="nav-item">✅ Mark Attendance</a>
+        <a href="reports.html" class="nav-item">📊 Reports</a>
+        <a href="students.html" class="nav-item active">👥 Students</a>
+        <a href="subjects.html" class="nav-item">📚 Subjects</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="cr-info">
+          <div class="cr-avatar" id="crAvatar">CR</div>
+          <div>
+            <div class="cr-name" id="crName">Loading...</div>
+            <div class="cr-class" id="crClass">--</div>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <header class="top-bar">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <h2>Students</h2>
+        <div class="top-bar-right">
+          <button class="btn-primary" onclick="openModal('addStudentModal')">
+            + Add Student
+          </button>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <div class="section-card">
+          <div class="section-header">
+            <input type="text" id="searchStudents" placeholder="🔍 Search students..."
+                   oninput="filterStudentList()" class="search-input" />
+            <span id="studentCount" class="count-badge">0 students</span>
+          </div>
+          <div id="studentsTable">
+            <div class="loading-state">Loading students...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div class="modal-overlay hidden" id="addStudentModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Add New Student</h3>
+          <button onclick="closeModal('addStudentModal')">✕</button>
+        </div>
+        <form onsubmit="addStudent(event)">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="studentName" placeholder="Student full name" required />
+          </div>
+          <div class="form-group">
+            <label>Roll Number *</label>
+            <input type="text" id="studentRoll" placeholder="e.g. CS-21-042" required />
+          </div>
+          <div class="form-group">
+            <label>Email (Optional)</label>
+            <input type="email" id="studentEmail" placeholder="student@college.edu" />
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" onclick="closeModal('addStudentModal')">Cancel</button>
+            <button type="submit" class="btn-primary">Add Student</button>
+          </div>
+          <div id="addStudentError" class="error-msg hidden"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Edit Student Modal -->
+    <div class="modal-overlay hidden" id="editStudentModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Edit Student</h3>
+          <button onclick="closeModal('editStudentModal')">✕</button>
+        </div>
+        <form onsubmit="updateStudent(event)">
+          <input type="hidden" id="editStudentId" />
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="editStudentName" required />
+          </div>
+          <div class="form-group">
+            <label>Roll Number *</label>
+            <input type="text" id="editStudentRoll" required />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="editStudentEmail" />
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" onclick="closeModal('editStudentModal')">Cancel</button>
+            <button type="submit" class="btn-primary">Update</button>
+          </div>
+          <div id="editStudentError" class="error-msg hidden"></div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/students.js"></script>
+  </body>
+</html>
