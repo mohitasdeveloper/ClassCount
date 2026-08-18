@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - CR Attendance</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="logo">📋</span>
+        <span class="sidebar-title">CR Attendance</span>
+        <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item active">🏠 Dashboard</a>
+        <a href="mark-attendance.html" class="nav-item">✅ Mark Attendance</a>
+        <a href="reports.html" class="nav-item">📊 Reports</a>
+        <a href="students.html" class="nav-item">👥 Students</a>
+        <a href="subjects.html" class="nav-item">📚 Subjects</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="cr-info" id="crInfo">
+          <div class="cr-avatar" id="crAvatar">CR</div>
+          <div>
+            <div class="cr-name" id="crName">Loading...</div>
+            <div class="cr-class" id="crClass">--</div>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <header class="top-bar">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <h2>Dashboard</h2>
+        <div class="top-bar-right">
+          <span id="todayDate" class="date-badge"></span>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card blue">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+              <div class="stat-number" id="totalStudents">--</div>
+              <div class="stat-label">Total Students</div>
+            </div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon">📅</div>
+            <div class="stat-info">
+              <div class="stat-number" id="todayPresent">--</div>
+              <div class="stat-label">Present Today</div>
+            </div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-icon">❌</div>
+            <div class="stat-info">
+              <div class="stat-number" id="todayAbsent">--</div>
+              <div class="stat-label">Absent Today</div>
+            </div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-icon">📖</div>
+            <div class="stat-info">
+              <div class="stat-number" id="totalSessions">--</div>
+              <div class="stat-label">Total Sessions</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="section-card">
+          <h3 class="section-title">⚡ Quick Actions</h3>
+          <div class="quick-actions">
+            <a href="mark-attendance.html" class="action-btn blue">
+              <span>✅</span>
+              <span>Mark Attendance</span>
+            </a>
+            <a href="reports.html" class="action-btn green">
+              <span>📊</span>
+              <span>View Reports</span>
+            </a>
+            <a href="students.html" class="action-btn purple">
+              <span>👤</span>
+              <span>Add Student</span>
+            </a>
+            <a href="subjects.html" class="action-btn orange">
+              <span>📚</span>
+              <span>Manage Subjects</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Recent Sessions -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">🕐 Recent Sessions</h3>
+            <a href="reports.html" class="see-all">See All</a>
+          </div>
+          <div id="recentSessions">
+            <div class="loading-state">Loading sessions...</div>
+          </div>
+        </div>
+
+        <!-- Today's Absentees -->
+        <div class="section-card">
+          <h3 class="section-title">⚠️ Today's Absentees</h3>
+          <div id="todayAbsentees">
+            <div class="loading-state">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+  </body>
+</html>
