@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CR Attendance - Login</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="auth-page">
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <div class="logo">📋</div>
+          <h1>CR Attendance</h1>
+          <p>College Class Representative Portal</p>
+        </div>
+
+        <!-- Tab Switcher -->
+        <div class="tab-switcher">
+          <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+          <button class="tab-btn" onclick="switchTab('register')">Register</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="auth-form">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="loginEmail" placeholder="cr@college.edu" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="loginPassword" placeholder="••••••••" required />
+              <button type="button" class="toggle-pass" onclick="togglePassword('loginPassword')">👁</button>
+            </div>
+          </div>
+          <div class="form-footer">
+            <label class="checkbox-label">
+              <input type="checkbox" id="rememberMe" /> Remember me
+            </label>
+            <a href="#" onclick="forgotPassword()">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn-primary" id="loginBtn">
+            <span class="btn-text">Login</span>
+            <span class="btn-loader hidden">⏳</span>
+          </button>
+          <div id="loginError" class="error-msg hidden"></div>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" class="auth-form hidden">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="regName" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label>Roll Number</label>
+            <input type="text" id="regRoll" placeholder="e.g. CS-21-001" required />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="regEmail" placeholder="cr@college.edu" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="regPassword" placeholder="Min 6 characters" required />
+              <button type="button" class="toggle-pass" onclick="togglePassword('regPassword')">👁</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Department</label>
+            <select id="regDept" required>
+              <option value="">Select Department</option>
+              <option>Computer Science</option>
+              <option>Information Technology</option>
+              <option>Electronics</option>
+              <option>Mechanical</option>
+              <option>Civil</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Semester</label>
+              <select id="regSem" required>
+                <option value="">Sem</option>
+                <option>1</option><option>2</option><option>3</option>
+                <option>4</option><option>5</option><option>6</option>
+                <option>7</option><option>8</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Section</label>
+              <select id="regSection" required>
+                <option value="">Sec</option>
+                <option>A</option><option>B</option>
+                <option>C</option><option>D</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary" id="registerBtn">
+            <span class="btn-text">Create Account</span>
+            <span class="btn-loader hidden">⏳</span>
+          </button>
+          <div id="registerError" class="error-msg hidden"></div>
+          <div id="registerSuccess" class="success-msg hidden"></div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+  </body>
+</html>
