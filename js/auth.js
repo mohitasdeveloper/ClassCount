@@ -163,7 +163,7 @@ if (loginForm) {
 }
 
 // =====================
-// REGISTER FORM
+// REGISTER FORM - REPLACE THE ENTIRE SUBMIT HANDLER
 // =====================
 const registerForm = document.getElementById("registerForm");
 if (registerForm) {
@@ -185,7 +185,6 @@ if (registerForm) {
       showMessage("registerError", "⚠️ Please fill in all required fields");
       return;
     }
-
     if (password.length < 6) {
       showMessage("registerError", "⚠️ Password must be at least 6 characters");
       return;
@@ -193,7 +192,7 @@ if (registerForm) {
 
     setButtonLoading("registerBtn", true, "Create Account");
 
-    // Step 1: Create Supabase auth user
+    // Step 1: Sign up user
     const { data: authData, error: authError } = await supabaseClient.auth.signUp({
       email,
       password,
@@ -206,12 +205,30 @@ if (registerForm) {
     }
 
     if (!authData.user) {
-      showMessage("registerError", "❌ Sign up failed. Try again.");
+      showMessage("registerError", "❌ Signup failed. Please try again.");
       setButtonLoading("registerBtn", false, "Create Account");
       return;
     }
 
-    // Step 2: Create class record
+    // Step 2: Sign in immediately so RLS works
+    const { error: signInError } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (signInError) {
+      // If email confirmation is required
+      showMessage(
+        "registerSuccess",
+        "✅ Account created! Please verify your email before logging in.",
+        false
+      );
+      setButtonLoading("registerBtn", false, "Create Account");
+      registerForm.reset();
+      return;
+    }
+
+    // Step 3: Create class (now authenticated, RLS will pass)
     const { data: classData, error: classError } = await supabaseClient
       .from("classes")
       .insert({
@@ -229,7 +246,7 @@ if (registerForm) {
       return;
     }
 
-    // Step 3: Create CR profile
+    // Step 4: Create CR profile
     const { error: profileError } = await supabaseClient
       .from("cr_profiles")
       .insert({
@@ -246,17 +263,14 @@ if (registerForm) {
       return;
     }
 
-    // Success
-    showMessage(
-      "registerSuccess",
-      "✅ Account created successfully! Please check your email to verify, then login.",
-      false
-    );
-    setButtonLoading("registerBtn", false, "Create Account");
-    registerForm.reset();
+    // Step 5: Redirect to dashboard
+    showMessage("registerSuccess", "✅ Account created! Redirecting...", false);
+    
+    setTimeout(() => {
+      window.location.href = "dashboard.html";
+    }, 1000);
   });
 }
-
 // =====================
 // TODAY DATE DISPLAY
 // =====================
