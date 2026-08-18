@@ -15,11 +15,11 @@
           <p>College Class Representative Portal</p>
         </div>
 
-        <!-- Tab Switcher -->
-        <div class="tab-switcher">
-          <button class="tab-btn active" onclick="switchTab('login')">Login</button>
-          <button class="tab-btn" onclick="switchTab('register')">Register</button>
-        </div>
+     <!-- Tab Switcher -->
+<div class="tab-switcher">
+  <button class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Login</button>
+  <button class="tab-btn" id="tabRegister" onclick="switchTab('register')">Register</button>
+</div>
 
         <!-- Login Form -->
         <form id="loginForm" class="auth-form">
@@ -40,11 +40,9 @@
             </label>
             <a href="#" onclick="forgotPassword()">Forgot password?</a>
           </div>
-          <button type="submit" class="btn-primary" id="loginBtn">
-            <span class="btn-text">Login</span>
-            <span class="btn-loader hidden">⏳</span>
-          </button>
-          <div id="loginError" class="error-msg hidden"></div>
+       <!-- Login button - add id -->
+<button type="submit" class="btn-primary" id="loginBtn">Login</button>
+<div id="loginError" class="error-msg hidden"></div>
         </form>
 
         <!-- Register Form -->
@@ -98,12 +96,11 @@
               </select>
             </div>
           </div>
-          <button type="submit" class="btn-primary" id="registerBtn">
-            <span class="btn-text">Create Account</span>
-            <span class="btn-loader hidden">⏳</span>
-          </button>
-          <div id="registerError" class="error-msg hidden"></div>
-          <div id="registerSuccess" class="success-msg hidden"></div>
+        
+<!-- Register button - add id -->  
+<button type="submit" class="btn-primary" id="registerBtn">Create Account</button>
+<div id="registerError" class="error-msg hidden"></div>
+<div id="registerSuccess" class="success-msg hidden"></div>
         </form>
       </div>
     </div>
