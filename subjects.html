@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subjects - CR Attendance</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="logo">📋</span>
+        <span class="sidebar-title">CR Attendance</span>
+        <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
+        <a href="mark-attendance.html" class="nav-item">✅ Mark Attendance</a>
+        <a href="reports.html" class="nav-item">📊 Reports</a>
+        <a href="students.html" class="nav-item">👥 Students</a>
+        <a href="subjects.html" class="nav-item active">📚 Subjects</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="cr-info">
+          <div class="cr-avatar" id="crAvatar">CR</div>
+          <div>
+            <div class="cr-name" id="crName">Loading...</div>
+            <div class="cr-class" id="crClass">--</div>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <header class="top-bar">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <h2>Subjects</h2>
+        <div class="top-bar-right">
+          <button class="btn-primary" onclick="openModal('addSubjectModal')">+ Add Subject</button>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <div class="section-card">
+          <div id="subjectsGrid" class="subjects-grid">
+            <div class="loading-state">Loading subjects...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Subject Modal -->
+    <div class="modal-overlay hidden" id="addSubjectModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Add Subject</h3>
+          <button onclick="closeModal('addSubjectModal')">✕</button>
+        </div>
+        <form onsubmit="addSubject(event)">
+          <div class="form-group">
+            <label>Subject Name *</label>
+            <input type="text" id="subjectName" placeholder="e.g. Data Structures" required />
+          </div>
+          <div class="form-group">
+            <label>Subject Code *</label>
+            <input type="text" id="subjectCode" placeholder="e.g. CS-301" required />
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" onclick="closeModal('addSubjectModal')">Cancel</button>
+            <button type="submit" class="btn-primary">Add Subject</button>
+          </div>
+          <div id="addSubjectError" class="error-msg hidden"></div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+      let classId = null;
+
+      async function initSubjects() {
+        const profile = await loadCRProfile();
+        if (!profile?.class_id) return;
+        classId = profile.class_id;
+        await loadSubjects();
+      }
+
+      async function loadSubjects() {
+        const { data: subjects } = await supabase
+          .from("subjects")
+          .select("*")
+          .eq("class_id", classId)
+          .order("name");
+
+        const grid = document.getElementById("subjectsGrid");
+        if (!subjects || subjects.length === 0) {
+          grid.innerHTML = `<div class="empty-state">📚 No subjects yet. Add your first subject!</div>`;
+          return;
+        }
+
+        grid.innerHTML = subjects.map(s => `
+          <div class="subject-card">
+            <div class="subject-icon">📖</div>
+            <div class="subject-name">${s.name}</div>
+            <div class="subject-code">${s.code}</div>
+            <button class="btn-icon danger" onclick="deleteSubject('${s.id}')">🗑️ Delete</button>
+          </div>
+        `).join("");
+      }
+
+      async function addSubject(e) {
+        e.preventDefault();
+        const name = document.getElementById("subjectName").value.trim();
+        const code = document.getElementById("subjectCode").value.trim();
+        const errEl = document.getElementById("addSubjectError");
+
+        const { error } = await supabase.from("subjects").insert({ name, code, class_id: classId });
+
+        if (error) { errEl.textContent = error.message; errEl.classList.remove("hidden"); return; }
+
+        closeModal("addSubjectModal");
+        document.getElementById("subjectName").value = "";
+        document.getElementById("subjectCode").value = "";
+        await loadSubjects();
+      }
+
+      async function deleteSubject(id) {
+        if (!confirm("Delete this subject? All related attendance data will be lost!")) return;
+        await supabase.from("subjects").delete().eq("id", id);
+        await loadSubjects();
+      }
+
+      function openModal(id) { document.getElementById(id).classList.remove("hidden"); }
+      function closeModal(id) { document.getElementById(id).classList.add("hidden"); }
+
+      initSubjects();
+    </script>
+
+    <style>
+      .subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+      .subject-card { background: var(--bg); border-radius: 12px; padding: 1.25rem;
+        text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+      .subject-icon { font-size: 2.5rem; }
+      .subject-name { font-weight: 700; font-size: 1rem; }
+      .subject-code { font-size: 0.82rem; color: var(--text-light); background: var(--card);
+        padding: 0.2rem 0.6rem; border-radius: 20px; }
+    </style>
+  </body>
+</html>
