@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reports - CR Attendance</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="logo">📋</span>
+        <span class="sidebar-title">CR Attendance</span>
+        <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
+        <a href="mark-attendance.html" class="nav-item">✅ Mark Attendance</a>
+        <a href="reports.html" class="nav-item active">📊 Reports</a>
+        <a href="students.html" class="nav-item">👥 Students</a>
+        <a href="subjects.html" class="nav-item">📚 Subjects</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="cr-info">
+          <div class="cr-avatar" id="crAvatar">CR</div>
+          <div>
+            <div class="cr-name" id="crName">Loading...</div>
+            <div class="cr-class" id="crClass">--</div>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <header class="top-bar">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <h2>Attendance Reports</h2>
+        <div class="top-bar-right">
+          <button class="btn-export" onclick="exportCSV()">📥 Export CSV</button>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <!-- Filters -->
+        <div class="section-card">
+          <h3 class="section-title">🔍 Filter Reports</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Subject</label>
+              <select id="filterSubject" onchange="loadReport()">
+                <option value="">All Subjects</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>From Date</label>
+              <input type="date" id="filterFrom" onchange="loadReport()" />
+            </div>
+            <div class="form-group">
+              <label>To Date</label>
+              <input type="date" id="filterTo" onchange="loadReport()" />
+            </div>
+            <div class="form-group">
+              <label>View Type</label>
+              <select id="viewType" onchange="loadReport()">
+                <option value="student">By Student</option>
+                <option value="session">By Session</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary Stats -->
+        <div class="stats-grid" id="reportStats">
+          <div class="stat-card blue">
+            <div class="stat-icon">📖</div>
+            <div class="stat-info">
+              <div class="stat-number" id="rTotalSessions">--</div>
+              <div class="stat-label">Total Sessions</div>
+            </div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon">📈</div>
+            <div class="stat-info">
+              <div class="stat-number" id="rAvgAttendance">--</div>
+              <div class="stat-label">Avg Attendance %</div>
+            </div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-info">
+              <div class="stat-number" id="rBelow75">--</div>
+              <div class="stat-label">Below 75%</div>
+            </div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-info">
+              <div class="stat-number" id="rPerfect">--</div>
+              <div class="stat-label">100% Attendance</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Report Table -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">📋 Attendance Data</h3>
+            <div class="legend">
+              <span class="legend-item green">✅ Present</span>
+              <span class="legend-item red">❌ Absent</span>
+              <span class="legend-item orange">⏰ Late</span>
+            </div>
+          </div>
+          <div id="reportTable" class="table-wrapper">
+            <div class="loading-state">Loading report...</div>
+          </div>
+        </div>
+
+        <!-- Low Attendance Alert -->
+        <div class="section-card" id="lowAttendanceSection">
+          <h3 class="section-title">🚨 Low Attendance Alert (&lt;75%)</h3>
+          <div id="lowAttendanceList">
+            <div class="loading-state">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/reports.js"></script>
+  </body>
+</html>
